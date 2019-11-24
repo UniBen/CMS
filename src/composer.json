@@ -1,0 +1,19 @@
+{
+    "name": "uniben/cms",
+    "authors": [
+        {
+            "name": "UniBen",
+            "email": "u1765774@unimail.hud.ac.uk"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^6.5",
+        "illuminate/database": "^6.5",
+        "laravel/helpers": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "UniBen\\CMS\\": "src/"
+        }
+    }
+}

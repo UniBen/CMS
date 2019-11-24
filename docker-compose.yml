@@ -1,0 +1,27 @@
+version: '3.2'
+
+services:
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./src:/src
+      - ./etc/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached,ro
+    environment:
+      - VIRTUAL_HOST=cms.local.blw.sh
+      - VIRTUAL_PORT=80
+      - CERT_NAME=local.blw.sh
+    expose:
+      - 80
+    working_dir: /src
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/src
+      - ./composer.json:/src/composer.json:cached
+    working_dir: /src
+networks:
+  default:
+    external:
+      name: proxy-network
