@@ -4,7 +4,8 @@ services:
   web:
     image: nginx:alpine
     volumes:
-      - ./src:/src
+      - laravel:/src
+      - ./src/public/index.php:/src/public/index.php:cached
       - ./etc/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached,ro
     environment:
       - VIRTUAL_HOST=cms.local.blw.sh
@@ -18,9 +19,12 @@ services:
       context: .
       dockerfile: php.dockerfile
     volumes:
-      - ./src:/src
-      - ./composer.json:/src/composer.json:cached
+      - laravel:/src
+      - ./src:/package:cached
+      - ./src/public/index.php:/src/public/index.php:cached
     working_dir: /src
+volumes:
+  laravel:
 networks:
   default:
     external:

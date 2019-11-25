@@ -16,12 +16,12 @@ class Editable extends Model {
     protected $field = null;
 
     /**
-     * @param string $name
+     * @param string $field
      *
      * @return EditableFactory|mixed
      */
-    public function __get($name)
+    public function __get($field)
     {
-        return new EditableFactory($this, $name, $this->attributes[$name]);
+        return new EditableFactory($this, $field, $this->attributes[$field]);
     }
 }

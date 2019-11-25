@@ -12,6 +12,11 @@ class EditableFactory {
     protected $model;
 
     /**
+     * @var string
+     */
+    protected $field;
+
+    /**
      * @var array
      */
     protected $values = [];
@@ -19,12 +24,39 @@ class EditableFactory {
     /**
      * EditableFactory constructor.
      *
-     * @param array $values
+     * @param Model  $model
+     * @param string $field
+     * @param array  $values
      */
-    public function __construct($model, ...$values)
+    public function __construct($model, $field, ...$values)
     {
-        $this->$model = $model;
+        $this->model = $model;
+        $this->field = $field;
         $this->values = $values;
+    }
+
+    /**
+     * @return Model
+     */
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getField(): string
+    {
+        return $this->field;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValues(): array
+    {
+        return $this->values;
     }
 
     /**
@@ -36,6 +68,8 @@ class EditableFactory {
     public function title($tag = 'p', $attributes = []) : string
     {
         $attributes = collect($attributes);
+        $intent = new EditableIntent($this);
+        $intent->getID();
         return "<$tag ". $attributes->map(function($value, $key) { return "$key='$value'"; })->implode(' ') . ">{$this->values[0]}</$tag>";
     }
 

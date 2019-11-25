@@ -1,59 +1,36 @@
 <?php namespace UniBen\CMS;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Encryption\Encrypter;
 
 /**
  * Class EditableIntent
  */
 class EditableIntent {
     /**
-     * @var Model
+     * @var EditableFactory
      */
-    protected $model;
-    /**
-     * @var string
-     */
-    protected $field;
-    /**
-     * @var null
-     */
-    protected $value;
+    protected $factory;
 
     /**
      * EditableIntent constructor.
      *
-     * @param $model
-     * @param $field
-     * @param $value
+     * @param EditableFactory $factory
      */
-    public function __construct(Model $model, string $field, $value = null)
+    public function __construct(EditableFactory $factory)
     {
-        $this->model = $model;
-        $this->field = $field;
-        $this->value = $value;
+        $this->factory = $factory;
     }
 
-    /**
-     * @return Model
-     */
-    public function getModel(): Model
+    public function getID()
     {
-        return $this->model;
-    }
+        $encrypted = (openssl_encrypt(json_encode([[
+            'model_name' => get_class($this->factory->getModel()),
+            'model_key' => $this->factory->getModel()->getQualifiedKeyName(),
+            'model_id' => $this->factory->getModel()->getKey()
+        ]]), 'aes-128-ctr', 'key'));
 
-    /**
-     * @return string
-     */
-    public function getField(): string
-    {
-        return $this->field;
-    }
+        print $encrypted;
 
-    /**
-     * @return null
-     */
-    public function getValue()
-    {
-        return $this->value;
+
     }
 }
