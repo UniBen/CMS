@@ -1,10 +1,10 @@
-version: '3.2'
+version: '3.7'
 
 services:
   web:
     image: nginx:alpine
     volumes:
-      - laravel:/src
+      - ./laravel:/src:cached
       - ./src/public/index.php:/src/public/index.php:cached
       - ./etc/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached,ro
     environment:
@@ -19,12 +19,10 @@ services:
       context: .
       dockerfile: php.dockerfile
     volumes:
-      - laravel:/src
+      - ./laravel:/src:cached
       - ./src:/package:cached
       - ./src/public/index.php:/src/public/index.php:cached
     working_dir: /src
-volumes:
-  laravel:
 networks:
   default:
     external:
