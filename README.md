@@ -19,7 +19,7 @@ $model->field->image() // Output <video class="..." data-edtable="..."><source s
 Allow everyone to edit a particular model:
 
 ```php
-class X extend Editable {
+class X extends Editable {
     public function canEdit()
     {
         return true;
@@ -30,7 +30,7 @@ class X extend Editable {
 Only allow logged in users to edit:
 
 ```php
-class X extend Editable {
+class X extends Editable {
     public function canEdit()
     {
         return auth()->user(); // Could even check their permissions here?
