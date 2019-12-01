@@ -1,13 +1,19 @@
 <?php namespace UniBen\CMS;
 
-use Illuminate\Database\Eloquent\Model;
+use UniBen\CMS\Editables\EditableElement;
+use UniBen\CMS\Editables\Image;
+use UniBen\CMS\Editables\Input;
+use UniBen\CMS\Editables\Text;
+use UniBen\CMS\Editables\Title;
+use UniBen\CMS\Editables\Video;
+use UniBen\CMS\Models\Editable;
 
 /**
  * Class EditableFactory
  */
 class EditableFactory {
     /**
-     * @var Model
+     * @var Editable
      */
     protected $model;
 
@@ -24,11 +30,11 @@ class EditableFactory {
     /**
      * EditableFactory constructor.
      *
-     * @param Model  $model
+     * @param Editable  $model
      * @param string $field
      * @param array  $values
      */
-    public function __construct($model, $field, ...$values)
+    public function __construct(Editable $model, string $field, ...$values)
     {
         $this->model = $model;
         $this->field = $field;
@@ -36,9 +42,9 @@ class EditableFactory {
     }
 
     /**
-     * @return Model
+     * @return Editable
      */
-    public function getModel(): Model
+    public function getModel(): Editable
     {
         return $this->model;
     }
@@ -60,52 +66,82 @@ class EditableFactory {
     }
 
     /**
+     * @return EditableIntent
+     */
+    public function intent()
+    {
+        return new EditableIntent($this);
+    }
+
+    /**
+     * @param string $default
      * @param string $tag
      * @param array  $attributes
      *
      * @return string
      */
-    public function title($tag = 'p', $attributes = []) : string
+    protected function editable($default = null, $tag = 'div', $attributes = []) : string
     {
-        $attributes = collect($attributes);
-        $intent = new EditableIntent($this);
-        $intent->getID();
-        return "<$tag ". $attributes->map(function($value, $key) { return "$key='$value'"; })->implode(' ') . ">{$this->values[0]}</$tag>";
+        return (new EditableElement($this, $default, $tag, $attributes))->render();
     }
 
     /**
+     * @param string $default
      * @param string $tag
      * @param array  $attributes
      *
      * @return string
      */
-    public function text($tag = 'p', $attributes = []) : string
+    public function title($default = 'Please enter a title.', $tag = 'h1', $attributes = []) : string
     {
-        return "<$tag ". implode('', array_map(function($key, $value) { return "$key='$value'"; }, $attributes)) . ">{$this->values[0]}</$tag>";
+        return (new Title($this, $default, $tag, $attributes))->render();
     }
 
     /**
+     * @param string $default
+     * @param string $tag
+     * @param array  $attributes
+     *
      * @return string
      */
-    public function media() : string
+    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : string
     {
-
+        return (new Text($this, $default, $tag, $attributes))->render();
     }
 
     /**
+     * @param string $default
+     * @param string $tag
+     * @param array  $attributes
+     *
      * @return string
      */
-    public function image() : string
+    public function input($default = 'Please enter placeholder text.', $tag = 'text', $attributes = []) : string
     {
-
+        return (new Input($this, $default, $tag, $attributes))->render();
     }
 
     /**
+     * @param string $default
+     * @param array  $attributes
+     *
      * @return string
      */
-    public function video() : string
+    public function image($default = 'http://placeimg.com/640/360/any', $attributes = []) : string
     {
+        return (new Image($this, $default, null, $attributes))->render();
+    }
 
+    /**
+     * @param string $default
+     * @param string $tag
+     * @param array  $attributes
+     *
+     * @return string
+     */
+    public function video($default = 'https://www.w3schools.com/html/mov_bbb.mp4', $tag = 'text', $attributes = []) : string
+    {
+        return (new Video($this, $default, $tag, $attributes))->render();
     }
 
     /**

@@ -4,4 +4,4 @@ services:
   php:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: ./etc/docker/php.install.dockerfile

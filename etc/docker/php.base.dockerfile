@@ -61,11 +61,3 @@ WORKDIR /src
 # Install hirak/prestissimo
 RUN composer global require hirak/prestissimo
 
-# Install Laravel
-RUN composer create-project --prefer-dist laravel/laravel .
-
-# Update composer.json
-#RUN echo $(cat '/src/composer.json' | jq '. + {repositories:[{"type":"path","url":"/package","options":{"symlink":true}}]}') > '/src/composer.json' && \
-#    echo $(cat '/src/composer.json' | jq '.require["uniben/cms"] = "@dev"') > '/src/composer.json' && \
-#    composer update uniben/cms --prefer-source
-

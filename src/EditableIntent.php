@@ -1,7 +1,5 @@
 <?php namespace UniBen\CMS;
 
-use Illuminate\Encryption\Encrypter;
-
 /**
  * Class EditableIntent
  */
@@ -23,14 +21,10 @@ class EditableIntent {
 
     public function getID()
     {
-        $encrypted = (openssl_encrypt(json_encode([[
-            'model_name' => get_class($this->factory->getModel()),
-            'model_key' => $this->factory->getModel()->getQualifiedKeyName(),
-            'model_id' => $this->factory->getModel()->getKey()
-        ]]), 'aes-128-ctr', 'key'));
-
-        print $encrypted;
-
-
+        return base64_encode(json_encode([
+            'm' => get_class($this->factory->getModel()),
+            'i' => $this->factory->getModel()->getKey(),
+            'f' => $this->factory->getField()
+        ]));
     }
 }
