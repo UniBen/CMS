@@ -1,12 +1,15 @@
-<?php namespace UniBen\CMS\Editables;
+<?php
+
+namespace UniBen\CMS\Editables;
 
 use UniBen\CMS\EditableFactory;
+use UniBen\CMS\Contracts\EditableElement as EditableElementContract;
 
 /**
  * Class EditableElement
  * @package UniBen\CMS\Editables
  */
-class EditableElement {
+class EditableElement implements EditableElementContract {
     /**
      * @var EditableFactory
      */
@@ -58,6 +61,20 @@ class EditableElement {
      */
     public function renderEditable() : string
     {
+        return $this->renderViewable([
+            'data-editable' => $this->factory->intent()->getID(),
+            'class' => 'editable',
+            'contenteditable' => 'true'
+        ]);
+    }
+
+    /**
+     * @param array|null $arr
+     *
+     * @return mixed
+     */
+    public function renderViewable(array $arr = []) : string
+    {
         $tag = $this->tag;
         $attributes = $this->attributes;
         if (is_array($tag)) {
@@ -66,30 +83,18 @@ class EditableElement {
         }
 
         return $this->outputElement(
-            $this->outputElement(
-                $this->factory->getValues()[0] ?? $this->default,
-                'span',
-                ['class' => 'editable_content', 'contenteditable' => 'true']
-            ),
+            $this->factory->getValues()[0] ?? $this->default,
             $tag,
-            array_merge($attributes, ['data-editable' => $this->factory->intent()->getID()])
+            array_merge($attributes, $arr)
         );
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function renderViewable() : string
+    public function handleUpdate() : bool
     {
-        return (string) $this->factory->getValues()[0];
-    }
-
-    /**
-     *
-     */
-    public function handleUpdate()
-    {
-        // Todo
+        return true;
     }
 
     /**

@@ -11,23 +11,27 @@ class Editable extends Model {
      * @var null
      */
     protected $model = null;
+
     /**
      * @var null
      */
     protected $field = null;
 
+
     /**
      * @return boolean
      */
     public function canEdit()
+
     {
-        return !auth()->user();
+        return auth()->user();
     }
 
     /**
      * @param string $field
      *
      * @return EditableFactory|mixed
+     *
      */
     public function __get($field)
     {

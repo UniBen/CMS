@@ -23,15 +23,25 @@ class Input extends EditableElement
         parent::__construct($factory, $default, $tag, $attributes);
     }
 
+    public function renderEditable(): string
+    {
+        return $this->renderViewable([
+            'data-editable' => $this->factory->intent()->getID(),
+            'class' => 'editable'
+        ]);
+    }
+
     /**
+     * @param array|null $arr
+     *
      * @return string
      */
-    public function renderEditable(): string
+    public function renderViewable(array $arr = []): string
     {
         return $this->outputElement(
             null,
             'input',
-            array_merge($this->attributes, ['placeholder' => $this->default, 'type' => $this->tag]),
+            array_merge($this->attributes, $arr, ['placeholder' => $this->default, 'type' => $this->tag]),
             true
         );
     }
