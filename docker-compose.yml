@@ -12,6 +12,8 @@ services:
       - CERT_NAME=local.blw.sh
     expose:
       - 80
+    ports:
+      - 8080:80
     working_dir: /src
   php:
     build:

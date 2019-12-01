@@ -2,6 +2,14 @@
 
 A content management system that allows you to output editable content to the page.
 
+## Install
+
+```shell script
+$ composer require uniben/cms
+```
+
+## Examples
+
 ```php
 $model->field // Field value
 ```
@@ -37,6 +45,17 @@ class X extends Editable {
     }
 }
 ```
+
+## Contributing
+
+For an easy install of a development environment you can use docker to run using docker. The docker file will install laravel and the package for you along with a temporary database.
+
+### Install
+
+```shell script
+$ docker-compose up -d
+``` 
+Visit `localhost:8080`
 
 ## How it works
 
