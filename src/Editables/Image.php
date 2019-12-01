@@ -25,10 +25,7 @@ class Image extends EditableElement
 
     public function renderEditable(): string
     {
-        return $this->renderViewable([
-            'data-editable' => $this->factory->intent()->getID(),
-            'class' => 'editable'
-        ]);
+        return $this->renderViewable($this->editableAttrArr());
     }
 
     /**

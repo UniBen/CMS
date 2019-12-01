@@ -24,7 +24,8 @@ services:
       - /src/bootstrap
       - /src/vendor
       - /src/public
-      - ./src:/package
+      - ./src:/package/src
+      - ./package.json:/package/package.json
       - ./etc/php/php.ini:/usr/local/etc/php/conf.d/00_mvc.ini:delegated,ro
     working_dir: /src
 networks:

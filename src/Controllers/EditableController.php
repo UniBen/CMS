@@ -6,24 +6,31 @@ use Illuminate\Routing\Controller;
 use ReflectionClass;
 use ReflectionException;
 use UniBen\CMS\Exceptions\UpdateFailedException;
-use UniBen\CMS\Models\Editable;
 
+/**
+ * Class EditableController
+ * @package UniBen\CMS\Controllers
+ */
 class EditableController extends Controller {
+    /**
+     * @param Request $request
+     *
+     * @todo Check the classes being reflected are not evil and perform permissions check as soon as possible.
+     *
+     * @return mixed
+     * @throws UpdateFailedException
+     */
     public function update(Request $request) {
-        $data = $request->input();
 
         // Decode intent
-        $intent = json_decode(base64_decode($data['intent']));
+        $intent = json_decode(base64_decode($request->input('intent')));
 
-        // Get value
-        $value = $data['value'];
+        try {
+            $editableClass = (new ReflectionClass($request->input('type')))->newInstanceWithoutConstructor();
+        } catch (ReflectionException $e) {
+            throw new UpdateFailedException('Unable to find field type to update.');
+        }
 
-        /**
-         * @var string $modelString
-         * @var Editable $model
-         * @var string $field
-         * @var int $id
-         */
         $modelString = $intent->m;
 
         try {
@@ -32,13 +39,12 @@ class EditableController extends Controller {
             throw new UpdateFailedException("Couldn't find model to update.");
         }
 
-        $field = $intent->f;
         $id = $intent->i;
 
         try {
             return $model::updateOrCreate(
                 [$model->getKeyName() => $id],
-                [$field => $value]
+                $request->input('data', [])
             );
         } catch (QueryException $exception) {
             throw new UpdateFailedException($exception->getPrevious()->getMessage());

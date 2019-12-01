@@ -24,7 +24,7 @@ class Editable extends Model {
     public function canEdit()
 
     {
-        return auth()->user();
+        return !auth()->user();
     }
 
     /**

@@ -22,4 +22,12 @@ class Text extends EditableElement
     {
         parent::__construct($factory, $default, $tag, $attributes);
     }
+
+    /**
+     * @return string
+     */
+    public function renderEditable(): string
+    {
+        return $this->renderViewable($this->editableAttrArr(['contenteditable' => 'true']));
+    }
 }

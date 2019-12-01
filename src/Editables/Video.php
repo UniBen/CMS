@@ -30,10 +30,11 @@ class Video extends EditableElement
      */
     public function renderEditable(): string
     {
-        return $this->outputElement($this->renderViewable(), 'div', [
-            'data-editable' => $this->factory->intent()->getID(),
-            'class' => 'editable'
-        ]);
+        return $this->outputElement(
+            $this->renderViewable(),
+            'div',
+            $this->editableAttrArr()
+        );
     }
 
     /**

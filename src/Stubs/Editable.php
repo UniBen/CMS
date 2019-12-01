@@ -6,7 +6,8 @@ use UniBen\CMS\EditableFactory;
 /**
  * Class Editable
  *
- * @property EditableFactory|string $name
+ * @property EditableFactory $name
+ * @property EditableFactory $content
  */
 class Editable extends BaseEditable
 {

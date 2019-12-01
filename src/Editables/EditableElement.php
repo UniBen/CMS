@@ -2,6 +2,7 @@
 
 namespace UniBen\CMS\Editables;
 
+use Illuminate\Database\Eloquent\Concerns\HasEvents;
 use UniBen\CMS\EditableFactory;
 use UniBen\CMS\Contracts\EditableElement as EditableElementContract;
 
@@ -29,6 +30,11 @@ class EditableElement implements EditableElementContract {
      * @var array
      */
     protected $attributes;
+
+    /**
+     * @var array
+     */
+    private $rules;
 
     /**
      * EditableElement constructor.
@@ -61,11 +67,7 @@ class EditableElement implements EditableElementContract {
      */
     public function renderEditable() : string
     {
-        return $this->renderViewable([
-            'data-editable' => $this->factory->intent()->getID(),
-            'class' => 'editable',
-            'contenteditable' => 'true'
-        ]);
+        return $this->renderViewable($this->editableAttrArr());
     }
 
     /**
@@ -90,11 +92,29 @@ class EditableElement implements EditableElementContract {
     }
 
     /**
+     * Rules
+     */
+    public function rules(array $rules)
+    {
+        $this->rules = $rules;
+    }
+
+    /**
      * @return bool
      */
     public function handleUpdate() : bool
     {
         return true;
+    }
+
+    public function editableAttrArr(array $arr = [])
+    {
+        return array_merge([
+            'data-editable' => $this->factory->intent()->getID(),
+            'data-editable-field' => $this->factory->getField(),
+            'data-editable-type' => get_called_class(),
+            'class' => 'editable'
+        ], $arr);
     }
 
     /**

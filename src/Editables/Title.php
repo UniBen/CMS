@@ -22,4 +22,28 @@ class Title extends EditableElement
     {
         parent::__construct($factory, $default, $tag, $attributes);
     }
+
+    /**
+     * @return string
+     */
+    public function renderEditable(): string
+    {
+        return $this->renderViewable($this->editableAttrArr(['contenteditable' => 'true']));
+    }
+
+    public function renderViewable(array $arr = []): string
+    {
+        $tag = $this->tag;
+        $attributes = $this->attributes;
+        if (is_array($tag)) {
+            $attributes = $tag;
+            $tag = 'p';
+        }
+
+        return $this->outputElement(
+            e($this->factory->getValues()[0] ?? $this->default),
+            $tag,
+            array_merge($attributes, $arr)
+        );
+    }
 }
