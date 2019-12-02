@@ -146,9 +146,9 @@ class EditableFactory {
     }
 
     /**
-     * @return HtmlString|string
+     * @return string
      */
-    public function __toString() : HtmlString
+    public function __toString() : string
     {
         return $this->values[0];
     }
