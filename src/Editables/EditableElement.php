@@ -2,8 +2,8 @@
 
 namespace UniBen\CMS\Editables;
 
-use Illuminate\Database\Eloquent\Concerns\HasEvents;
 use UniBen\CMS\EditableFactory;
+use Illuminate\Support\HtmlString;
 use UniBen\CMS\Contracts\EditableElement as EditableElementContract;
 
 /**
@@ -53,13 +53,14 @@ class EditableElement implements EditableElementContract {
     }
 
     /**
-     * @return string
+     * @return HtmlString
      */
-    public function render() : string
+    public function render() : HtmlString
     {
-        return $this->factory->getModel()->canEdit()
+        return new HtmlString($this->factory->getModel()->canEdit()
             ? $this->renderEditable()
-            : $this->renderViewable();
+            : $this->renderViewable()
+        );
     }
 
     /**

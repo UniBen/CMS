@@ -1,5 +1,6 @@
 <?php namespace UniBen\CMS;
 
+use Illuminate\Support\HtmlString;
 use UniBen\CMS\Editables\EditableElement;
 use UniBen\CMS\Editables\Image;
 use UniBen\CMS\Editables\Input;
@@ -50,7 +51,7 @@ class EditableFactory {
     }
 
     /**
-     * @return string
+     * @return HtmlString|string
      */
     public function getField(): string
     {
@@ -78,9 +79,9 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    protected function editable($default = null, $tag = 'div', $attributes = []) : string
+    protected function editable($default = null, $tag = 'div', $attributes = []) : HtmlString
     {
         return (new EditableElement($this, $default, $tag, $attributes))->render();
     }
@@ -90,9 +91,9 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function title($default = 'Please enter a title.', $tag = 'h1', $attributes = []) : string
+    public function title($default = 'Please enter a title.', $tag = 'h1', $attributes = []) : HtmlString
     {
         return (new Title($this, $default, $tag, $attributes))->render();
     }
@@ -102,9 +103,9 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : string
+    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : HtmlString
     {
         return (new Text($this, $default, $tag, $attributes))->render();
     }
@@ -114,9 +115,9 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function input($default = 'Please enter placeholder text.', $tag = 'text', $attributes = []) : string
+    public function input($default = 'Please enter placeholder text.', $tag = 'text', $attributes = []) : HtmlString
     {
         return (new Input($this, $default, $tag, $attributes))->render();
     }
@@ -125,9 +126,9 @@ class EditableFactory {
      * @param string $default
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function image($default = 'http://placeimg.com/640/360/any', $attributes = []) : string
+    public function image($default = 'http://placeimg.com/640/360/any', $attributes = []) : HtmlString
     {
         return (new Image($this, $default, null, $attributes))->render();
     }
@@ -137,17 +138,17 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return string
+     * @return HtmlString|string
      */
-    public function video($default = 'https://www.w3schools.com/html/mov_bbb.mp4', $tag = 'text', $attributes = []) : string
+    public function video($default = 'https://www.w3schools.com/html/mov_bbb.mp4', $tag = 'text', $attributes = []) : HtmlString
     {
         return (new Video($this, $default, $tag, $attributes))->render();
     }
 
     /**
-     * @return string
+     * @return HtmlString|string
      */
-    public function __toString() : string
+    public function __toString() : HtmlString
     {
         return $this->values[0];
     }
