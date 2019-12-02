@@ -7,10 +7,10 @@
         }
     ],
     "require": {
-        "illuminate/support": "^6.5",
-        "illuminate/database": "^6.5",
+        "illuminate/support": "^5.2",
+        "illuminate/database": "^5.2",
         "laravel/helpers": "^1.1",
-        "illuminate/encryption": "^6.5",
+        "illuminate/encryption": "^5.2",
         "ext-json": "*"
     },
     "autoload": {
