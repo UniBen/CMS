@@ -57,7 +57,7 @@ class Image extends EditableElement
                 return $this->outputElement(null, $element, $attributes);
             })->implode(null, null),
             'picture',
-            array_merge($attributes, $arr)
+            $this->mergeAttributes($attributes, $arr)
         );
     }
 }

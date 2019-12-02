@@ -6,6 +6,6 @@ use Illuminate\Support\HtmlString;
 
 interface EditableElement
 {
-    public function render() : HtmlString;
+    public function render() : string;
     public function handleUpdate() : bool;
 }

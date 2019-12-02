@@ -79,11 +79,11 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return EditableElement|string
      */
-    protected function editable($default = null, $tag = 'div', $attributes = []) : HtmlString
+    protected function editable($default = null, $tag = 'div', $attributes = []) : EditableElement
     {
-        return (new EditableElement($this, $default, $tag, $attributes))->render();
+        return new EditableElement($this, $default, $tag, $attributes);
     }
 
     /**
@@ -91,11 +91,11 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return Title|string
      */
-    public function title($default = 'Please enter a title.', $tag = 'h1', $attributes = []) : HtmlString
+    public function title($default = 'Please enter a title.', $tag = 'h1', $attributes = []) : Title
     {
-        return (new Title($this, $default, $tag, $attributes))->render();
+        return new Title($this, $default, $tag, $attributes);
     }
 
     /**
@@ -103,11 +103,11 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return Text|string
      */
-    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : HtmlString
+    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : Text
     {
-        return (new Text($this, $default, $tag, $attributes))->render();
+        return new Text($this, $default, $tag, $attributes);
     }
 
     /**
@@ -115,22 +115,22 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return Input|string
      */
-    public function input($default = 'Please enter placeholder text.', $tag = 'text', $attributes = []) : HtmlString
+    public function input($default = 'Please enter placeholder text.', $tag = 'text', $attributes = []) : Input
     {
-        return (new Input($this, $default, $tag, $attributes))->render();
+        return new Input($this, $default, $tag, $attributes);
     }
 
     /**
      * @param string $default
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return Image|string
      */
-    public function image($default = 'http://placeimg.com/640/360/any', $attributes = []) : HtmlString
+    public function image($default = 'http://placeimg.com/640/360/any', $attributes = []) : Image
     {
-        return (new Image($this, $default, null, $attributes))->render();
+        return new Image($this, $default, null, $attributes);
     }
 
     /**
@@ -138,15 +138,15 @@ class EditableFactory {
      * @param string $tag
      * @param array  $attributes
      *
-     * @return HtmlString|string
+     * @return Video|string
      */
-    public function video($default = 'https://www.w3schools.com/html/mov_bbb.mp4', $tag = 'text', $attributes = []) : HtmlString
+    public function video($default = 'https://www.w3schools.com/html/mov_bbb.mp4', $tag = 'text', $attributes = []) : Video
     {
-        return (new Video($this, $default, $tag, $attributes))->render();
+        return new Video($this, $default, $tag, $attributes);
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function __toString()
     {

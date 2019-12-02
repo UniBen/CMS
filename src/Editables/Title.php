@@ -43,7 +43,7 @@ class Title extends EditableElement
         return $this->outputElement(
             e($this->factory->getValues()[0] ?? $this->default),
             $tag,
-            array_merge($attributes, $arr)
+            $this->mergeAttributes($attributes, $arr)
         );
     }
 }

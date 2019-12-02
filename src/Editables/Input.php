@@ -38,7 +38,7 @@ class Input extends EditableElement
         return $this->outputElement(
             null,
             'input',
-            array_merge($this->attributes, $arr, ['placeholder' => $this->default, 'type' => $this->tag]),
+            $this->mergeAttributes($this->attributes, $arr, ['placeholder' => $this->default, 'type' => $this->tag]),
             true
         );
     }

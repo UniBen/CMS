@@ -62,7 +62,7 @@ class Video extends EditableElement
                 return $this->outputElement(null, 'source', $video);
             })->implode(null, null),
             'video',
-            array_merge($attributes, ['controls'])
+            $this->mergeAttributes($attributes, ['controls'])
         );
     }
 }

@@ -2,24 +2,30 @@
 
 namespace UniBen\CMS\Editables;
 
+use Illuminate\Support\Arr;
 use UniBen\CMS\EditableFactory;
-use Illuminate\Support\HtmlString;
+use Illuminate\Contracts\Support\Htmlable;
 use UniBen\CMS\Contracts\EditableElement as EditableElementContract;
 
 /**
  * Class EditableElement
  * @package UniBen\CMS\Editables
  */
-class EditableElement implements EditableElementContract {
+class EditableElement implements EditableElementContract, Htmlable {
     /**
      * @var EditableFactory
      */
     protected $factory;
 
     /**
-     * @var null
+     * @var string|null
      */
     protected $default;
+
+    /**
+     * @var string|null
+     */
+    protected $value;
 
     /**
      * @var string
@@ -48,19 +54,19 @@ class EditableElement implements EditableElementContract {
     {
         $this->factory = $factory;
         $this->default = $default;
+        $this->value = $this->factory->getValues()[0] ?? $this->default;
         $this->tag = $tag;
         $this->attributes = $attributes;
     }
 
     /**
-     * @return HtmlString
+     * @return string
      */
-    public function render() : HtmlString
+    public function render() : string
     {
-        return new HtmlString($this->factory->getModel()->canEdit()
+        return $this->factory->getModel()->canEdit()
             ? $this->renderEditable()
-            : $this->renderViewable()
-        );
+            : $this->renderViewable();
     }
 
     /**
@@ -86,16 +92,18 @@ class EditableElement implements EditableElementContract {
         }
 
         return $this->outputElement(
-            $this->factory->getValues()[0] ?? $this->default,
+            $this->value,
             $tag,
-            array_merge($attributes, $arr)
+            $this->mergeAttributes($attributes, $arr)
         );
     }
 
     /**
      * Rules
+     *
+     * @param array $rules
      */
-    public function rules(array $rules)
+    public function rules(array $rules = [])
     {
         $this->rules = $rules;
     }
@@ -108,9 +116,14 @@ class EditableElement implements EditableElementContract {
         return true;
     }
 
+    /**
+     * @param array $arr
+     *
+     * @return array
+     */
     public function editableAttrArr(array $arr = [])
     {
-        return array_merge([
+        return $this->mergeAttributes([
             'data-editable' => $this->factory->intent()->getID(),
             'data-editable-field' => $this->factory->getField(),
             'data-editable-type' => get_called_class(),
@@ -119,11 +132,32 @@ class EditableElement implements EditableElementContract {
     }
 
     /**
+     * @param mixed ...$arrays
+     *
+     * @return array
+     */
+    public function mergeAttributes(...$arrays)
+    {
+        $stringMerges =  ['class'];
+        $mergedStrings = [];
+
+        foreach ($stringMerges as $key) {
+            $mergedStrings[$key] = implode(' ', Arr::pluck($arrays, $key));
+
+            foreach ($arrays as &$array) {
+                unset($array[$key]);
+            }
+        }
+
+        return array_merge($mergedStrings, ...$arrays);
+    }
+
+    /**
      * @param $attributes
      *
      * @return string
      */
-    public function outputArgs($attributes) : string
+    public function outputAttributes($attributes) : string
     {
         return collect($attributes)
             ->map(function($value, $key) {
@@ -142,6 +176,23 @@ class EditableElement implements EditableElementContract {
      */
     public function outputElement($value = null, $tag = 'div', $attributes = [], $isSingleton = false) : string
     {
-        return "<$tag {$this->outputArgs($attributes)}" . ($isSingleton ? "/>" : ">$value</$tag>");
+        return "<$tag {$this->outputAttributes($attributes)}" . ($isSingleton ? "/>" : ">$value</$tag>");
+    }
+
+    /**
+     * Get content as a string of HTML.
+     * @return string
+     */
+    public function toHtml()
+    {
+        return $this->render();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->render();
     }
 }
