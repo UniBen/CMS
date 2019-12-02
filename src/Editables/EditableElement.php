@@ -138,7 +138,7 @@ class EditableElement implements EditableElementContract, Htmlable {
      */
     public function mergeAttributes(...$arrays)
     {
-        $stringMerges =  ['class'];
+        $stringMerges =  ['class', 'style'];
         $mergedStrings = [];
 
         foreach ($stringMerges as $key) {
