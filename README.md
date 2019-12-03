@@ -53,8 +53,15 @@ For an easy install of a development environment you can use docker to run using
 ### Install
 
 ```shell script
-$ docker-compose up -d
+$ make install
 ``` 
+
+### Start
+
+```shell script
+docker-compose up -d
+```
+
 Visit `localhost:8080`
 
 ## How it works
