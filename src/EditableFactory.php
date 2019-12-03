@@ -150,6 +150,6 @@ class EditableFactory {
      */
     public function __toString()
     {
-        return $this->values[0];
+        return $this->values[0] ?? '';
     }
 }

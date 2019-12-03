@@ -17,6 +17,10 @@ class Editable extends Model {
      */
     protected $field = null;
 
+    /**
+     * @var array
+     */
+    protected $fillable = ['_editables'];
 
     /**
      * @return boolean
@@ -25,6 +29,19 @@ class Editable extends Model {
 
     {
         return !auth()->user();
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function transform(array $data = [])
+    {
+        return array_merge(
+            array_intersect_key($data, array_flip($this->fillable)),
+            ['_editables' => array_diff_key($data, array_flip($this->fillable))]
+        );
     }
 
     /**
@@ -37,7 +54,13 @@ class Editable extends Model {
     {
         // If value not found via parent get check content.{field} if there is
         // a consent column and is json.
-        return new EditableFactory($this, $field, parent::__get($field));
+        $result = parent::__get($field);
+
+        if (!$result && $this->getAttributeValue('_editables')[$field]) {
+            $result = $this->getAttributeValue('_editables')[$field];
+        }
+
+        return new EditableFactory($this, $field, $result);
     }
 
     /**

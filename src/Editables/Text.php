@@ -18,9 +18,14 @@ class Text extends EditableElement
      * @param string          $tag
      * @param array           $attributes
      */
-    public function __construct(EditableFactory $factory, $default = 'Please enter text.', $tag = 'p', $attributes = [])
+    public function __construct(EditableFactory $factory, $default = 'Please enter text.', $tag = null, $attributes = [])
     {
         parent::__construct($factory, $default, $tag, $attributes);
+    }
+
+    public function renderViewable(array $arr = []): string
+    {
+        return $this->tag || !empty($arr) ? parent::renderViewable($arr) : $this->value;
     }
 
     /**

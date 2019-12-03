@@ -34,17 +34,19 @@ class EditableController extends Controller {
         $modelString = $intent->m;
 
         try {
+            /** @var self $model */
             $model = (new ReflectionClass($modelString))->newInstanceWithoutConstructor();
         } catch (ReflectionException $e) {
             throw new UpdateFailedException("Couldn't find model to update.");
         }
 
+        $data = $model->transform($request->input('data', []));
         $id = $intent->i;
 
         try {
             return $model::updateOrCreate(
                 [$model->getKeyName() => $id],
-                $request->input('data', [])
+                $data
             );
         } catch (QueryException $exception) {
             throw new UpdateFailedException($exception->getPrevious()->getMessage());

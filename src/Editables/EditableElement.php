@@ -142,14 +142,16 @@ class EditableElement implements EditableElementContract, Htmlable {
         $mergedStrings = [];
 
         foreach ($stringMerges as $key) {
-            $mergedStrings[$key] = implode(' ', Arr::pluck($arrays, $key));
+            if ($plucked = Arr::pluck($arrays, $key)) {
+                $mergedStrings[$key] = implode(' ', $plucked);
+            }
 
             foreach ($arrays as &$array) {
                 unset($array[$key]);
             }
         }
 
-        return array_merge($mergedStrings, ...$arrays);
+        return array_filter(array_merge($mergedStrings, ...$arrays));
     }
 
     /**
