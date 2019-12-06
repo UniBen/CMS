@@ -1,4 +1,8 @@
 # Frontend CMS
+[![Latest Stable Version](https://poser.pugx.org/uniben/cms/version)](https://packagist.org/packages/uniben/cms)
+[![Total Downloads](https://poser.pugx.org/uniben/cms/downloads)](https://packagist.org/packages/uniben/cms)
+[![Latest Unstable Version](https://poser.pugx.org/uniben/cms/v/unstable)](//packagist.org/packages/uniben/cms)
+[![License](https://poser.pugx.org/uniben/cms/license)](https://packagist.org/packages/uniben/cms)
 
 A content management system that allows you to output editable content to the page.
 
