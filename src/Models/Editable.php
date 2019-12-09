@@ -56,27 +56,24 @@ class Editable extends Model {
     {
         $result = parent::__get($field);
 
-
+        // If the value can't be found in the attributes array we try get it
+        // from the editables column.
         if (!$result && isset($this->getAttributeValue('_editables')[$field])) {
             $result = $this->getAttributeValue('_editables')[$field];
         }
 
+        // There is a very slight performance hit here. A better way of going about
+        // implementing this would be to fix casting in relations but there are
+        // a lot and it seems difficult to maintain.
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
 
+        // Note on performance. is_a is 54.98% slower than instance of however,
+        // instanceof would require and actual instantiation and not a string.
         return !(isset($caller['class']) && (
             is_a($caller['class'], Relation::class, true) ||
             is_a($caller['class'], Model::class, true)
         ))
             ? new EditableFactory($this, $field, $result)
             : $result;
-    }
-
-    /**
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function __set($key, $value)
-    {
-        parent::__set($key, $value);
     }
 }
