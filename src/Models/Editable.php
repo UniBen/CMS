@@ -54,23 +54,21 @@ class Editable extends Model {
      */
     public function __get($field)
     {
-        $b = $result = parent::__get($field);
+        $result = parent::__get($field);
 
 
         if (!$result && isset($this->getAttributeValue('_editables')[$field])) {
-            $a = $result = $this->getAttributeValue('_editables')[$field];
+            $result = $this->getAttributeValue('_editables')[$field];
         }
 
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
 
-        $f = !(isset($caller['class']) && (
+        return !(isset($caller['class']) && (
             is_a($caller['class'], Relation::class, true) ||
             is_a($caller['class'], Model::class, true)
         ))
             ? new EditableFactory($this, $field, $result)
             : $result;
-
-        return $f;
     }
 
     /**
