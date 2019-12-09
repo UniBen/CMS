@@ -86,9 +86,10 @@ class EditableElement implements EditableElementContract, Htmlable {
     {
         $tag = $this->tag;
         $attributes = $this->attributes;
+
         if (is_array($tag)) {
             $attributes = $tag;
-            $tag = 'p';
+            $tag = 'span';
         }
 
         return $this->outputElement(

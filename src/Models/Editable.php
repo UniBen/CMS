@@ -1,7 +1,9 @@
 <?php namespace UniBen\CMS\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use UniBen\CMS\EditableFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Class Editable
@@ -52,15 +54,23 @@ class Editable extends Model {
      */
     public function __get($field)
     {
-        // If value not found via parent get check content.{field} if there is
-        // a consent column and is json.
-        $result = parent::__get($field);
+        $b = $result = parent::__get($field);
 
-        if (!$result && $this->getAttributeValue('_editables')[$field]) {
-            $result = $this->getAttributeValue('_editables')[$field];
+
+        if (!$result && isset($this->getAttributeValue('_editables')[$field])) {
+            $a = $result = $this->getAttributeValue('_editables')[$field];
         }
 
-        return new EditableFactory($this, $field, $result);
+        $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+
+        $f = !(isset($caller['class']) && (
+            is_a($caller['class'], Relation::class, true) ||
+            is_a($caller['class'], Model::class, true)
+        ))
+            ? new EditableFactory($this, $field, $result)
+            : $result;
+
+        return $f;
     }
 
     /**
@@ -69,8 +79,6 @@ class Editable extends Model {
      */
     public function __set($key, $value)
     {
-        // If the field is not in attributes array and their is content column
-        // which casts to json then insert the value in to that.
         parent::__set($key, $value);
     }
 }

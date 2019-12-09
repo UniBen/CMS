@@ -15,7 +15,16 @@ class Editable extends BaseEditable
     /**
      * @var array
      */
-    protected $fillable = ['name', 'content', '_editables'];
+    protected $fillable = [
+        'name',
+        'content',
+        '_editables'
+    ];
+
+    protected $with = [
+        'parent',
+        'others',
+    ];
 
     /**
      * @var array
@@ -30,5 +39,10 @@ class Editable extends BaseEditable
     public function parent()
     {
         return $this->belongsTo(Editable::class);
+    }
+
+    public function others()
+    {
+        return $this->morphTo();
     }
 }

@@ -12,19 +12,16 @@ services:
       - CERT_NAME=local.blw.sh
     expose:
       - 80
-    ports:
-      - 8080:80
     working_dir: /src
   php:
     build:
       context: .
-      dockerfile: ./etc/docker/php.producton.dockerfile
+      dockerfile: ./etc/docker/php.local.dockerfile
     volumes:
+      - ./src:/package/src
       - ./laravel:/src:delegated
       - /src/bootstrap
-      - /src/vendor
       - /src/public
-      - ./src:/package/src
       - ./package.json:/package/package.json
       - ./etc/php/php.ini:/usr/local/etc/php/conf.d/00_mvc.ini:delegated,ro
     working_dir: /src
