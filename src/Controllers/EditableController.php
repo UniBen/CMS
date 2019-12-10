@@ -6,6 +6,7 @@ use Illuminate\Routing\Controller;
 use ReflectionClass;
 use ReflectionException;
 use UniBen\CMS\Exceptions\UpdateFailedException;
+use UniBen\CMS\Models\Editable;
 
 /**
  * Class EditableController
@@ -15,13 +16,10 @@ class EditableController extends Controller {
     /**
      * @param Request $request
      *
-     * @todo Check the classes being reflected are not evil and perform permissions check as soon as possible.
-     *
      * @return mixed
      * @throws UpdateFailedException
      */
     public function update(Request $request) {
-
         // Decode intent
         $intent = json_decode(base64_decode($request->input('intent')));
 
@@ -34,21 +32,28 @@ class EditableController extends Controller {
         $modelString = $intent->m;
 
         try {
-            /** @var self $model */
+            /** @var Editable $model */
             $model = (new ReflectionClass($modelString))->newInstanceWithoutConstructor();
         } catch (ReflectionException $e) {
             throw new UpdateFailedException("Couldn't find model to update.");
         }
 
-        $data = $model->transform($request->input('data', []));
-        $id = $intent->i;
+        if (!$model->canEdit()) abort(400, 'Permission denied.');
+
+        $data = $request->input('data');
 
         try {
-            return $model::updateOrCreate(
-                [$model->getKeyName() => $id],
-                $data
-            );
+            $model = $model::find($intent->i) ?? $model;
+
+            $model->editable()->updateOrCreate([], [
+                'data' => array_diff_key($data, array_flip($model->getFillable()))
+            ]);
+
+            $model->update(array_intersect_key($data, array_flip($model->getFillable())));
+
+            return $model;
         } catch (QueryException $exception) {
             throw new UpdateFailedException($exception->getPrevious()->getMessage());
         }
-    }}
+    }
+}

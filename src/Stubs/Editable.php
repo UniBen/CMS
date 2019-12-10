@@ -1,6 +1,7 @@
 <?php namespace UniBen\CMS\Stubs;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use UniBen\CMS\Models\Editable as BaseEditable;
 use UniBen\CMS\EditableFactory;
 
@@ -18,19 +19,13 @@ class Editable extends BaseEditable
     protected $fillable = [
         'name',
         'content',
-        '_editables'
     ];
-
-    protected $with = [
-        'parent',
-        'others',
-    ];
-
     /**
      * @var array
      */
-    protected $casts = [
-        '_editables' => 'json'
+    protected $with = [
+        'parent',
+        'others',
     ];
 
     /**
@@ -41,6 +36,9 @@ class Editable extends BaseEditable
         return $this->belongsTo(Editable::class);
     }
 
+    /**
+     * @return MorphTo
+     */
     public function others()
     {
         return $this->morphTo();

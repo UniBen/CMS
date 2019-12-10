@@ -1,8 +1,9 @@
 <?php namespace UniBen\CMS\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use UniBen\CMS\EditableFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
@@ -10,19 +11,22 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  */
 class Editable extends Model {
     /**
-     * @var null
+     * Editable constructor.
+     *
+     * @param array $attributes
      */
-    protected $model = null;
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        $this->with[] = 'editable';
+    }
 
     /**
-     * @var null
+     * @return MorphOne
      */
-    protected $field = null;
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['_editables'];
+    public function editable()
+    {
+        return $this->morphOne(EditableData::class, 'editable');
+    }
 
     /**
      * @return boolean
@@ -31,19 +35,6 @@ class Editable extends Model {
 
     {
         return !auth()->user();
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    public function transform(array $data = [])
-    {
-        return array_merge(
-            array_intersect_key($data, array_flip($this->fillable)),
-            ['_editables' => array_diff_key($data, array_flip($this->fillable))]
-        );
     }
 
     /**
@@ -58,8 +49,11 @@ class Editable extends Model {
 
         // If the value can't be found in the attributes array we try get it
         // from the editables column.
-        if (!$result && isset($this->getAttributeValue('_editables')[$field])) {
-            $result = $this->getAttributeValue('_editables')[$field];
+        if (!$result) {
+            /** @var EditableData $editableModel */
+            if ($editableModel = $this->getRelationValue('editable')) {
+                $result = $editableModel->data[$field] ?? null;
+            }
         }
 
         // There is a very slight performance hit here. A better way of going about
@@ -70,9 +64,9 @@ class Editable extends Model {
         // Note on performance. is_a is 54.98% slower than instance of however,
         // instanceof would require and actual instantiation and not a string.
         return !(isset($caller['class']) && (
-            is_a($caller['class'], Relation::class, true) ||
-            is_a($caller['class'], Model::class, true)
-        ))
+                is_a($caller['class'], Relation::class, true) ||
+                is_a($caller['class'], Model::class, true)
+            ))
             ? new EditableFactory($this, $field, $result)
             : $result;
     }
