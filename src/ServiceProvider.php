@@ -23,6 +23,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
+        $this->loadMigrationsFrom(__DIR__.'/Migrations');
         $this->loadRoutesFrom(__DIR__.'/web.php');
     }
 }
