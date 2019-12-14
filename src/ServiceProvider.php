@@ -23,6 +23,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
+        $this->publishes([__DIR__.'/dist' => public_path('vendor/uniben/cms'),], 'public');
         $this->loadMigrationsFrom(__DIR__.'/Migrations');
         $this->loadRoutesFrom(__DIR__.'/web.php');
     }
