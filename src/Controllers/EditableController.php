@@ -44,16 +44,33 @@ class EditableController extends Controller {
 
         try {
             $model = $model::find($intent->i) ?? $model;
+            $keys = array_merge(array_flip($model->getFillable()), $model->getAttributes());
 
             $model->editable()->updateOrCreate([], [
-                'data' => array_diff_key($data, array_flip($model->getFillable()))
+                'data' => array_diff_key($data, $keys)
             ]);
 
-            $model->update(array_intersect_key($data, array_flip($model->getFillable())));
+            foreach (array_intersect_key($data, $keys) as $property => $data) {
+                $model->$property = $data;
+            }
+
+            $model->save();
 
             return $model;
         } catch (QueryException $exception) {
-            throw new UpdateFailedException($exception->getPrevious()->getMessage());
+            if ($exception->getCode() === 'HY000') {
+                throw (new UpdateFailedException($exception->getMessage() . '. Make sure the the attribute is fillable.'))
+                    ->setData([$data])
+                    ->setIntent($request->input('intent'))
+                    ->setModel($model);
+            }
+
+            throw $exception;
+        } catch (QueryException $exception) {
+            throw (new UpdateFailedException($exception->getPrevious()->getMessage()))
+                ->setData([$data])
+                ->setIntent($request->input('intent'))
+                ->setModel($model);
         }
     }
 }

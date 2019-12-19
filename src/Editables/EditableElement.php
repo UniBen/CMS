@@ -163,6 +163,9 @@ class EditableElement implements EditableElementContract, Htmlable {
     public function outputAttributes($attributes) : string
     {
         return collect($attributes)
+            ->filter(function($value, $key) {
+                return !is_null($value);
+            })
             ->map(function($value, $key) {
                 return is_int($key) ? $value : "$key='$value'";
             })
