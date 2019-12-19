@@ -1,5 +1,6 @@
 {
     "name": "uniben/cms",
+    "description": "Laravel frontend CMS that allows you to output any model property as an editable field on your frontend.",
     "license": "GPL-3.0+",
     "authors": [
         {
