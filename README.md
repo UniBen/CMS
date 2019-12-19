@@ -72,3 +72,16 @@ Visit `localhost:8080`
 
 When an editable field is rendered it is given an id which maps to the model type, model id and updated field.
 When an update/save is made editable fields which belong to the same model are collated in to an array and sent to an update controller.
+
+# Todo
+* Switch edtable types render methods over to views rather than generatng inside of a method.
+* Handle redirect responses from edtables when a new product is created.
+* Make edtables on the frontend reactive using VueX
+* Use UniBen/laravel-graphqlable for an easy to use documented API.
+* Get wwyswig and image upload fields working using standard libraries.
+* Improve editable type caching and queries in admin
+* Make editable fields revisionable
+* Improve code qualiity
+* Aim for 100% code coverage
+* Make dynamic registration of editable types easy via a service provider
+* Reduce JS bundle size as much as possible
