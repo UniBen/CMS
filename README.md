@@ -73,7 +73,7 @@ Visit `localhost:8080`
 When an editable field is rendered it is given an id which maps to the model type, model id and updated field.
 When an update/save is made editable fields which belong to the same model are collated in to an array and sent to an update controller.
 
-# Todo
+## Todo
 * Switch edtable types render methods over to views rather than generatng inside of a method.
 * Handle redirect responses from edtables when a new product is created.
 * Make edtables on the frontend reactive using VueX
