@@ -64,14 +64,7 @@ class Editable extends Model {
         // a lot and it seems difficult to maintain.
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
 
-        // Note on performance. is_a is 54.98% slower than instance of however,
-        // instanceof would require and actual instantiation and not a string.
-        return !(
-            isset($caller['class']) && (
-                is_a($caller['class'], Relation::class, true) ||
-                is_a($caller['class'], Model::class, true)
-            )
-        )
+        return $caller['file'] === '/src/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php'
             ? new EditableFactory($this, $field, $result)
             : $result;
     }
