@@ -64,7 +64,7 @@ class Editable extends Model {
         // a lot and it seems difficult to maintain.
         $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
 
-        return $caller['file'] === '/src/vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php'
+        return strpos($caller['file'], 'vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php') !== false
             ? new EditableFactory($this, $field, $result)
             : $result;
     }
