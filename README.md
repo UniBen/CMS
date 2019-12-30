@@ -85,3 +85,4 @@ When an update/save is made editable fields which belong to the same model are c
 * Aim for 100% code coverage
 * Make dynamic registration of editable types easy via a service provider
 * Reduce JS bundle size as much as possible
+* Remove server side rendered editables and use vue components with ssr instead to simplify process.
