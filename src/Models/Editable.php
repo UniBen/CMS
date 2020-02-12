@@ -1,7 +1,9 @@
 <?php namespace UniBen\CMS\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
+use Route;
 use UniBen\CMS\EditableFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,6 +13,12 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * Class Editable
  */
 class Editable extends Model {
+    /**
+     * List of paths to exclude
+     * @var array
+     */
+    protected $excluded = [];
+
     /**
      * Editable constructor.
      *
@@ -48,11 +56,11 @@ class Editable extends Model {
     {
         $result = parent::__get($field);
 
-        if (is_object($result)) return $result;
+        if (request()->is($this->excluded) || is_object($result)) return $result;
 
         // If the value can't be found in the attributes array we try get it
         // from the editables column.
-        if (!$result) {
+        if ($result === null) {
             /** @var EditableData $editableModel */
             if (isset($this->relations['editable']) && $editableModel = $this->relations['editable']) {
                 $result = $editableModel->data[$field] ?? null;
@@ -67,5 +75,15 @@ class Editable extends Model {
         return isset($caller['file']) && strpos($caller['file'], 'vendor/laravel/framework/src/Illuminate/View/Engines/PhpEngine.php') !== false
             ? new EditableFactory($this, $field, $result)
             : $result;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function __set($key, $value)
+    {
+        if ($value instanceof EditableFactory) $value = $value->getValues()[0];
+        parent::__set($key, $value);
     }
 }
