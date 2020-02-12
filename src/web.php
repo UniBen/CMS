@@ -1,3 +1,5 @@
 <?php
 
-Route::post('uniben/cms/update', 'UniBen\CMS\Controllers\EditableController@update');
+Route::group(['middleware' => 'web'], function () {
+    Route::post('uniben/cms/update', 'UniBen\CMS\Controllers\EditableController@update');
+});

@@ -18,8 +18,8 @@ class CreateEditablesTable extends Migration
         Schema::create('editables', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->json('data');
-            $table->bigInteger('editable_id');
-            $table->string('editable_type');
+            $table->bigInteger('editable_id')->nullable();
+            $table->string('editable_type')->nullable();
             $table->timestamps();
         });
     }

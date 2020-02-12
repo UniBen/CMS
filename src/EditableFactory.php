@@ -2,6 +2,7 @@
 
 use Illuminate\Support\HtmlString;
 use UniBen\CMS\Editables\EditableElement;
+use UniBen\CMS\Editables\Editor;
 use UniBen\CMS\Editables\Image;
 use UniBen\CMS\Editables\Input;
 use UniBen\CMS\Editables\Text;
@@ -81,7 +82,7 @@ class EditableFactory {
      *
      * @return EditableElement|string
      */
-    protected function editable($default = null, $tag = 'div', $attributes = []) : EditableElement
+    protected function editable($default = null, $tag = 'span', $attributes = []) : EditableElement
     {
         return new EditableElement($this, $default, $tag, $attributes);
     }
@@ -105,9 +106,21 @@ class EditableFactory {
      *
      * @return Text|string
      */
-    public function text($default = 'Please enter text.', $tag = 'p', $attributes = []) : Text
+    public function text($default = 'Please enter text.', $tag = 'span', $attributes = []) : Text
     {
         return new Text($this, $default, $tag, $attributes);
+    }
+
+    /**
+     * @param string $default
+     * @param string $tag
+     * @param array  $attributes
+     *
+     * @return Editor|string
+     */
+    public function editor($default = 'Please enter text.', $tag = 'div', $attributes = []) : Editor
+    {
+        return new Editor($this, $default, $tag, $attributes);
     }
 
     /**
@@ -123,7 +136,7 @@ class EditableFactory {
     }
 
     /**
-     * @param string $default
+     * @param string|array $default
      * @param array  $attributes
      *
      * @return Image|string
@@ -134,7 +147,7 @@ class EditableFactory {
     }
 
     /**
-     * @param string $default
+     * @param string|array $default
      * @param string $tag
      * @param array  $attributes
      *
@@ -150,6 +163,6 @@ class EditableFactory {
      */
     public function __toString()
     {
-        return $this->values[0] ?? '';
+        return (string) $this->values[0] ?? '';
     }
 }
