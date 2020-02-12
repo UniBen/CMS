@@ -38,7 +38,7 @@ class EditableController extends Controller {
             throw new UpdateFailedException("Couldn't find model to update.");
         }
 
-        if (!$model->canEdit()) abort(400, 'Permission denied.');
+        if (!$model->canEdit()) abort(403, 'Permission denied.');
 
         $data = $request->input('data');
 
