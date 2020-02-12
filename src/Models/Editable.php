@@ -56,7 +56,7 @@ class Editable extends Model {
     {
         $result = parent::__get($field);
 
-        if (request()->is($this->excluded) || is_object($result)) return $result;
+        if (request()->is($this->excluded) || is_object($result) || is_iterable($result)) return $result;
 
         // If the value can't be found in the attributes array we try get it
         // from the editables column.
